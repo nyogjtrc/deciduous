@@ -1,1 +1,4 @@
 debug: false
+maria:
+  write: developer:developer@/
+  read: developer:developer@/

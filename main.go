@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 
+	_ "github.com/go-sql-driver/mysql"
+
 	"github.com/nyogjtrc/deciduous/cmd"
+	"github.com/nyogjtrc/deciduous/core/dbconn"
 	"github.com/nyogjtrc/deciduous/logging"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -24,6 +27,7 @@ func main() {
 	)
 
 	readconfig()
+	connectDB()
 
 	cmd.Execute()
 }
@@ -37,4 +41,24 @@ func readconfig() {
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s", err))
 	}
+}
+
+func connectDB() {
+	DSN := "developer:developer@/"
+
+	key := "maria.read"
+	if !viper.IsSet(key) {
+		logging.L().Fatal("config key not found", zap.String("key", key))
+	}
+
+	DSN = viper.GetString(key)
+	dbconn.OpenRead(DSN)
+
+	key = "maria.write"
+	if !viper.IsSet(key) {
+		logging.L().Fatal("config key not found", zap.String("key", key))
+	}
+
+	DSN = viper.GetString(key)
+	dbconn.OpenWrite(DSN)
 }
