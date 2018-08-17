@@ -14,4 +14,5 @@ func API(router *gin.Engine) {
 	})
 
 	router.GET("/db/now", controller.DBnow)
+	router.GET("/redis/server", controller.RedisServer)
 }

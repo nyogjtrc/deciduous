@@ -2,3 +2,5 @@ debug: false
 maria:
   write: developer:developer@/
   read: developer:developer@/
+redis:
+  addr: ':6379'

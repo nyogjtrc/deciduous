@@ -19,8 +19,7 @@ var (
 )
 
 func main() {
-	logging.L().Info(
-		"info",
+	logging.L().Info("info",
 		zap.String("version", version),
 		zap.String("commit:", commit),
 		zap.String("date:", date),
@@ -28,6 +27,7 @@ func main() {
 
 	readconfig()
 	connectDB()
+	connectRedis()
 
 	cmd.Execute()
 }
@@ -44,21 +44,26 @@ func readconfig() {
 }
 
 func connectDB() {
-	DSN := "developer:developer@/"
-
 	key := "maria.read"
 	if !viper.IsSet(key) {
 		logging.L().Fatal("config key not found", zap.String("key", key))
 	}
 
-	DSN = viper.GetString(key)
-	dbconn.OpenRead(DSN)
+	dbconn.OpenRead(viper.GetString(key))
 
 	key = "maria.write"
 	if !viper.IsSet(key) {
 		logging.L().Fatal("config key not found", zap.String("key", key))
 	}
 
-	DSN = viper.GetString(key)
-	dbconn.OpenWrite(DSN)
+	dbconn.OpenWrite(viper.GetString(key))
+}
+
+func connectRedis() {
+	key := "redis.addr"
+	if !viper.IsSet(key) {
+		logging.L().Fatal("config key not found", zap.String("key", key))
+	}
+
+	dbconn.RedisDial(viper.GetString(key))
 }
