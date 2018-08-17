@@ -13,6 +13,9 @@ all:
 run:
 	go run -v -ldflags $(build_flag)  main.go
 
+run-service:
+	go run -v -ldflags $(build_flag)  main.go service
+
 install:
 	go install -a -v -ldflags $(build_flag)
 

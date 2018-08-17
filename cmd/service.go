@@ -1,9 +1,8 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
+	"github.com/nyogjtrc/deciduous/logging"
 	"github.com/nyogjtrc/deciduous/routes"
 	"github.com/spf13/cobra"
 )
@@ -20,7 +19,7 @@ var serviceCmd = &cobra.Command{
 }
 
 func service() {
-	fmt.Println("run service")
+	logging.L().Info("run service")
 
 	engine := gin.Default()
 

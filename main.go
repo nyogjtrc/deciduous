@@ -4,7 +4,9 @@ import (
 	"fmt"
 
 	"github.com/nyogjtrc/deciduous/cmd"
+	"github.com/nyogjtrc/deciduous/logging"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 var (
@@ -14,13 +16,14 @@ var (
 )
 
 func main() {
-	fmt.Println("version:", version)
-	fmt.Println("commit:", commit)
-	fmt.Println("date:", date)
+	logging.L().Info(
+		"info",
+		zap.String("version", version),
+		zap.String("commit:", commit),
+		zap.String("date:", date),
+	)
 
 	readconfig()
-
-	fmt.Println(viper.GetBool("debug"))
 
 	cmd.Execute()
 }
