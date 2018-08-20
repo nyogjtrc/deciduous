@@ -7,6 +7,7 @@ var (
 	wConnection *sql.DB
 )
 
+// OpenRead DB connection
 func OpenRead(DSN string) {
 	var err error
 
@@ -20,6 +21,7 @@ func OpenRead(DSN string) {
 	}
 }
 
+// OpenWrite DB connection
 func OpenWrite(DSN string) {
 	var err error
 
@@ -33,10 +35,12 @@ func OpenWrite(DSN string) {
 	}
 }
 
+// DBRead return read connection
 func DBRead() *sql.DB {
 	return rConnection
 }
 
+// DBWrite return write connection
 func DBWrite() *sql.DB {
 	return wConnection
 }

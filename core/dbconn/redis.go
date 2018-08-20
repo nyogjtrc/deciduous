@@ -10,6 +10,7 @@ var (
 	redisClient *redis.Client
 )
 
+// RedisDial create redis client pool and ping redis server
 func RedisDial(addr string) {
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:         addr,
@@ -28,6 +29,7 @@ func RedisDial(addr string) {
 	}
 }
 
+// RedisClient return redis client
 func RedisClient() *redis.Client {
 	return redisClient
 }

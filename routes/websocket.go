@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// Websocket Routes
 func Websocket(router *gin.Engine) {
 	router.GET("/ws", func(c *gin.Context) {
 	})

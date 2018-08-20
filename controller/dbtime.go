@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nyogjtrc/deciduous/core/dbconn"
-	"github.com/nyogjtrc/deciduous/logging"
+	"github.com/nyogjtrc/deciduous/core/logging"
 )
 
 // DBnow response db time now

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/nyogjtrc/deciduous/logging"
+	"github.com/nyogjtrc/deciduous/core/logging"
 	"github.com/nyogjtrc/deciduous/routes"
 	"github.com/spf13/cobra"
 )
