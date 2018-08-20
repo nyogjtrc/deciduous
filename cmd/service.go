@@ -1,10 +1,13 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nyogjtrc/deciduous/core/logging"
 	"github.com/nyogjtrc/deciduous/routes"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func init() {
@@ -21,11 +24,20 @@ var serviceCmd = &cobra.Command{
 func service() {
 	logging.L().Info("run service")
 
-	engine := gin.Default()
+	gin.SetMode(gin.DebugMode)
+
+	engine := gin.New()
+	engine.Use(gin.Recovery())
+	engine.Use(gin.Logger())
 
 	// sets routes
 	routes.API(engine)
 	routes.Websocket(engine)
 
-	engine.Run() // listen and serve on 0.0.0.0:8080
+	port := "8080"
+	if value := viper.GetString("service"); value != "" {
+		port = value
+	}
+
+	engine.Run(fmt.Sprintf(":%s", port))
 }

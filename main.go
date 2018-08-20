@@ -47,7 +47,12 @@ func connectRedis() {
 		logging.L().Fatal("config key not found", zap.String("key", key))
 	}
 
-	dbconn.RedisDial(viper.GetString(key))
+	dbkey := "redis.db"
+	if !viper.IsSet(key) {
+		logging.L().Fatal("config key not found", zap.String("key", dbkey))
+	}
+
+	dbconn.RedisDial(viper.GetString(key), viper.GetInt(dbkey))
 }
 
 func main() {

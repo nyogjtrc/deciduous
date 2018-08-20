@@ -11,11 +11,11 @@ var (
 )
 
 // RedisDial create redis client pool and ping redis server
-func RedisDial(addr string) {
+func RedisDial(addr string, dbNum int) {
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:         addr,
 		Password:     "",
-		DB:           0,
+		DB:           dbNum,
 		DialTimeout:  10 * time.Second,
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
