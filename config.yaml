@@ -1,9 +1,9 @@
 debug: true
 service:
-  port: 8080
+  port: 8000
 maria:
-  write: developer:developer@/
-  read: developer:developer@/
+  write: root:secret@/
+  read: root:secret@/
 redis:
   addr: ':6379'
   db: 0

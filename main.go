@@ -1,11 +1,15 @@
 package main
 
 import (
+	"fmt"
+
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/nyogjtrc/deciduous/cmd"
+	"github.com/nyogjtrc/deciduous/config"
 	"github.com/nyogjtrc/deciduous/core/dbconn"
 	"github.com/nyogjtrc/deciduous/core/logging"
+	"github.com/nyogjtrc/deciduous/routes"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
@@ -16,43 +20,34 @@ var (
 	commit  string
 )
 
-func readconfig() {
-	viper.SetConfigType("yaml")
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		logging.L().Panic(err.Error())
-	}
-}
-
 func connectDB() {
-	key := "maria.read"
-	if !viper.IsSet(key) {
-		logging.L().Fatal("config key not found", zap.String("key", key))
-	}
-	dbconn.OpenRead(viper.GetString(key))
-
-	key = "maria.write"
-	if !viper.IsSet(key) {
-		logging.L().Fatal("config key not found", zap.String("key", key))
-	}
-	dbconn.OpenWrite(viper.GetString(key))
+	dbconn.OpenRead(viper.GetString(config.KeyMariaRead))
+	dbconn.OpenWrite(viper.GetString(config.KeyMariaWrite))
 }
 
 func connectRedis() {
-	key := "redis.addr"
-	if !viper.IsSet(key) {
-		logging.L().Fatal("config key not found", zap.String("key", key))
+	dbconn.RedisDial(viper.GetString(config.KeyRedisAddress), viper.GetInt(config.KeyRedisDB))
+}
+
+func service() {
+	logging.L().Info("run service")
+
+	gin.SetMode(gin.DebugMode)
+
+	engine := gin.New()
+	engine.Use(gin.Recovery())
+	engine.Use(gin.Logger())
+
+	// sets routes
+	routes.API(engine)
+	routes.Websocket(engine)
+
+	port := "8080"
+	if value := viper.GetString(config.KeyServicePort); value != "" {
+		port = value
 	}
 
-	dbkey := "redis.db"
-	if !viper.IsSet(key) {
-		logging.L().Fatal("config key not found", zap.String("key", dbkey))
-	}
-
-	dbconn.RedisDial(viper.GetString(key), viper.GetInt(dbkey))
+	engine.Run(fmt.Sprintf(":%s", port))
 }
 
 func main() {
@@ -62,10 +57,13 @@ func main() {
 		zap.String("date:", date),
 	)
 
-	readconfig()
+	err := config.Load()
+	if err != nil {
+		logging.L().Panic(err.Error())
+	}
 
 	connectDB()
 	connectRedis()
 
-	cmd.Execute()
+	service()
 }
