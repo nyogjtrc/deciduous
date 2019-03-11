@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nyogjtrc/deciduous/core/dbconn"
-	"github.com/nyogjtrc/deciduous/core/logging"
+	"github.com/nyogjtrc/deciduous/dbconn"
+	"github.com/nyogjtrc/deciduous/logging"
 )
 
 // RedisServer response redis info server section

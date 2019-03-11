@@ -7,8 +7,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/nyogjtrc/deciduous/config"
-	"github.com/nyogjtrc/deciduous/core/dbconn"
-	"github.com/nyogjtrc/deciduous/core/logging"
+	"github.com/nyogjtrc/deciduous/dbconn"
+	"github.com/nyogjtrc/deciduous/logging"
 	"github.com/nyogjtrc/deciduous/routes"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
