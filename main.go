@@ -5,9 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/nyogjtrc/deciduous/config"
-	"github.com/nyogjtrc/deciduous/dbconn"
+	"github.com/nyogjtrc/deciduous/conn"
 	"github.com/nyogjtrc/deciduous/logging"
 	"github.com/nyogjtrc/deciduous/routes"
 	"github.com/spf13/viper"
@@ -21,19 +20,15 @@ var (
 )
 
 func connectDB() {
-	dbconn.OpenRead(viper.GetString(config.KeyMariaRead))
-	dbconn.OpenWrite(viper.GetString(config.KeyMariaWrite))
+	conn.DBOpenRead(viper.GetString(config.KeyMariaRead))
+	conn.DBOpenWrite(viper.GetString(config.KeyMariaWrite))
 }
 
 func connectRedis() {
-	dbconn.RedisDial(viper.GetString(config.KeyRedisAddress), viper.GetInt(config.KeyRedisDB))
+	conn.RedisDial(viper.GetString(config.KeyRedisAddress), viper.GetInt(config.KeyRedisDB))
 }
 
 func service() {
-	logging.L().Info("run service")
-
-	gin.SetMode(gin.DebugMode)
-
 	engine := gin.New()
 	engine.Use(gin.Recovery())
 	engine.Use(gin.Logger())

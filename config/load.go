@@ -8,6 +8,7 @@ import (
 
 // config keys
 const (
+	KeyDebug      string = "debug"
 	KeyMariaRead  string = "maria.read"
 	KeyMariaWrite string = "maria.write"
 

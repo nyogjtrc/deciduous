@@ -19,3 +19,5 @@ run-service:
 install:
 	go install -a -v -ldflags $(build_flag)
 
+test:
+	go test ./...
