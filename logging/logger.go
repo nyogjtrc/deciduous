@@ -3,9 +3,11 @@ package logging
 import "go.uber.org/zap"
 
 var logger *zap.Logger
+var slogger *zap.SugaredLogger
 
 func init() {
 	newConsoleFileLogger()
+	newSugaredLogger()
 }
 
 func newDevelopment() {
@@ -26,7 +28,16 @@ func newConsoleFileLogger() {
 	}
 }
 
+func newSugaredLogger() {
+	slogger = logger.Sugar()
+}
+
 // L return zap logger
 func L() *zap.Logger {
 	return logger
+}
+
+// S return zap sugared logger
+func S() *zap.SugaredLogger {
+	return slogger
 }
