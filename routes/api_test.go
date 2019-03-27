@@ -6,17 +6,26 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestPingRoute(t *testing.T) {
-	r := gin.Default()
-	API(r)
+	gin.SetMode(gin.TestMode)
 
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/ping", nil)
-	r.ServeHTTP(w, req)
+	Convey("Given a HTTP request for /ping", t, func() {
+		req, _ := http.NewRequest("GET", "/ping", nil)
+		w := httptest.NewRecorder()
 
-	assert.Equal(t, 200, w.Code)
-	assert.Equal(t, "{\"message\":\"pong\"}", w.Body.String())
+		Convey("When the request is handled by the router", func() {
+			r := gin.Default()
+			API(r)
+			r.ServeHTTP(w, req)
+
+			Convey("Then response should be ok and include 'pong'", func() {
+				So(w.Code, ShouldEqual, 200)
+				So(w.Body.String(), ShouldContainSubstring, "pong")
+			})
+		})
+	})
 }
