@@ -1,23 +1,25 @@
-package apierror
+package apierrors
 
 import "fmt"
 
 // error codes
 const (
-	_ = iota
-	ErrBadRequestData
-	ErrNotFound
+	_ = uint(iota)
+	CodeBadRequest
+	CodeBadHeader
+	CodeUnauthorized
+	CodeDataNotFound
 )
 
 // AppError struct with code and message
 type AppError struct {
-	code    int
+	code    uint
 	message string
 	err     error
 }
 
 // New create Error instance
-func New(code int, message string, err error) *AppError {
+func New(code uint, message string, err error) *AppError {
 	return &AppError{code, message, err}
 }
 
@@ -27,7 +29,7 @@ func (e *AppError) Error() string {
 }
 
 // Code getter
-func (e *AppError) Code() int {
+func (e *AppError) Code() uint {
 	return e.code
 }
 
