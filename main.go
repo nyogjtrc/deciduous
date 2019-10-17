@@ -46,7 +46,11 @@ func service() {
 }
 
 func main() {
-	logging.L().Info("info",
+	// setting logger
+	logger := logging.NewRollingLogger()
+	zap.ReplaceGlobals(logger)
+
+	zap.L().Info("info",
 		zap.String("version", version),
 		zap.String("commit:", commit),
 		zap.String("date:", date),
@@ -54,7 +58,7 @@ func main() {
 
 	err := config.Load()
 	if err != nil {
-		logging.L().Panic(err.Error())
+		zap.L().Panic(err.Error())
 	}
 
 	connectDB()

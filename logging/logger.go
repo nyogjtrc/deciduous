@@ -8,50 +8,29 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-var logger *zap.Logger
-var slogger *zap.SugaredLogger
+const filename string = "service.log"
 
-func init() {
-	newConsoleFileLogger()
-	newSugaredLogger()
-}
-
-func newDevelopment() {
-	logger, _ = zap.NewDevelopment()
-}
-
-func newConsoleFileLogger() {
+// NewConsoleFileLogger will output log to stderr and file
+func NewConsoleFileLogger() *zap.Logger {
 	var err error
 	cfg := zap.NewProductionConfig()
 	cfg.OutputPaths = []string{
 		"stderr",
-		"/tmp/service.log",
+		filename,
 	}
 
-	logger, err = cfg.Build()
+	logger, err := cfg.Build()
 	if err != nil {
 		panic(err)
 	}
-}
 
-func newSugaredLogger() {
-	slogger = logger.Sugar()
-}
-
-// L return zap logger
-func L() *zap.Logger {
 	return logger
-}
-
-// S return zap sugared logger
-func S() *zap.SugaredLogger {
-	return slogger
 }
 
 // NewRollingLogger will rotate log file
 func NewRollingLogger() *zap.Logger {
 	writeFile := zapcore.AddSync(&lumberjack.Logger{
-		Filename: "service.log",
+		Filename: filename,
 		MaxSize:  10, // megabytes
 		MaxAge:   28, // days
 	})
