@@ -20,12 +20,29 @@ var (
 )
 
 func connectDB() {
-	conn.DBOpenRead(viper.GetString(config.KeyMariaRead))
-	conn.DBOpenWrite(viper.GetString(config.KeyMariaWrite))
+	dbRead, err := conn.DBReadOpen(viper.GetString(config.KeyMariaRead))
+	if err != nil {
+		zap.L().Panic(err.Error())
+	}
+	conn.SetDBRead(dbRead)
+
+	dbWrite, err := conn.DBWriteOpen(viper.GetString(config.KeyMariaWrite))
+	if err != nil {
+		zap.L().Panic(err.Error())
+	}
+	conn.SetDBWrite(dbWrite)
 }
 
 func connectRedis() {
-	conn.RedisDial(viper.GetString(config.KeyRedisAddress), viper.GetInt(config.KeyRedisDB))
+	rClient, err := conn.DialRedis(
+		viper.GetString(config.KeyRedisAddress),
+		"",
+		viper.GetInt(config.KeyRedisDB),
+	)
+	if err != nil {
+		zap.L().Panic(err.Error())
+	}
+	conn.SetRedis(rClient)
 }
 
 func service() {

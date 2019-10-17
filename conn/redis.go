@@ -1,35 +1,34 @@
 package conn
 
 import (
-	"time"
-
 	"github.com/go-redis/redis"
 )
 
-var (
-	redisClient *redis.Client
-)
+var redisClient *redis.Client
 
-// RedisDial create redis client pool and ping redis server
-func RedisDial(addr string, dbNum int) {
-	redisClient = redis.NewClient(&redis.Options{
-		Addr:         addr,
-		Password:     "",
-		DB:           dbNum,
-		DialTimeout:  10 * time.Second,
-		ReadTimeout:  15 * time.Second,
-		WriteTimeout: 15 * time.Second,
-		PoolSize:     100,
-		PoolTimeout:  15 * time.Second,
-	})
-
-	_, err := redisClient.Ping().Result()
-	if err != nil {
-		panic(err.Error())
-	}
+// SetRedis will replace redis client
+func SetRedis(client *redis.Client) {
+	redisClient = client
 }
 
-// RedisClient return redis client
-func RedisClient() *redis.Client {
+// Redis getter
+func Redis() *redis.Client {
 	return redisClient
+}
+
+// DialRedis create redis connection
+func DialRedis(addr, password string, db int) (*redis.Client, error) {
+	client := redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: password,
+		DB:       db,
+	})
+
+	err := client.Ping().Err()
+	return client, err
+}
+
+// DialTestRedis create testing redis connection
+func DialTestRedis() (*redis.Client, error) {
+	return DialRedis("", "", 1)
 }

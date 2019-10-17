@@ -3,44 +3,56 @@ package conn
 import "database/sql"
 
 var (
-	rConnection *sql.DB
-	wConnection *sql.DB
+	dbRead  *sql.DB
+	dbWrite *sql.DB
 )
 
-// DBOpenRead DB connection
-func DBOpenRead(DSN string) {
-	var err error
-
-	rConnection, err = sql.Open("mysql", DSN)
-	if err != nil {
-		panic(err.Error())
-	}
-	err = rConnection.Ping()
-	if err != nil {
-		panic(err.Error())
-	}
+// SetDBRead will replace db read
+func SetDBRead(db *sql.DB) {
+	dbRead = db
 }
 
-// DBOpenWrite DB connection
-func DBOpenWrite(DSN string) {
-	var err error
-
-	wConnection, err = sql.Open("mysql", DSN)
-	if err != nil {
-		panic(err.Error())
-	}
-	err = wConnection.Ping()
-	if err != nil {
-		panic(err.Error())
-	}
+// SetDBWrite will replace db write
+func SetDBWrite(db *sql.DB) {
+	dbRead = db
 }
 
 // DBRead return read connection
 func DBRead() *sql.DB {
-	return rConnection
+	return dbRead
 }
 
 // DBWrite return write connection
 func DBWrite() *sql.DB {
-	return wConnection
+	return dbWrite
+}
+
+// DBReadOpen DB connection
+func DBReadOpen(DSN string) (*sql.DB, error) {
+	var err error
+
+	db, err := sql.Open("mysql", DSN)
+	if err != nil {
+		return nil, err
+	}
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
+}
+
+// DBWriteOpen DB connection
+func DBWriteOpen(DSN string) (*sql.DB, error) {
+	var err error
+
+	db, err := sql.Open("mysql", DSN)
+	if err != nil {
+		return nil, err
+	}
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
