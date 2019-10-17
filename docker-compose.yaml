@@ -2,9 +2,7 @@ version: '3.7'
 
 services:
   mariadb:
-    container_name: deciduous_mariadb
     image: mariadb:latest
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_USER: developer
@@ -12,14 +10,16 @@ services:
     ports:
       - 3306:3306
   adminer:
-    container_name: deciduous_adminer
     image: adminer
-    restart: always
     ports:
       - 33060:8080
   redis:
-    container_name: deciduous_redis
     image: redis:latest
-    restart: always
     ports:
       - 6379:6379
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+    - REDIS_HOSTS=local:redis:6379
+    ports:
+    - 8081:8081
