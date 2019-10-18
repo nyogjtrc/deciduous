@@ -1,9 +1,9 @@
 
-version := $(shell git describe --tags 2> /dev/null)
+version := $(shell git describe --tags --dirty --match 'v*' || echo 'dev')
 buildtime := $(shell date +%Y/%m/%dT%H:%M:%S)
 commit := $(shell git rev-parse --short HEAD)
 
-build_flag := "-X main.version=develop -X main.date=$(buildtime) -X main.commit=$(commit)"
+build_flag := "-X main.version=$(version) -X main.buildtime=$(buildtime) -X main.commit=$(commit)"
 
 .PHONY: all
 

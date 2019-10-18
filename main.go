@@ -9,15 +9,22 @@ import (
 	"github.com/nyogjtrc/deciduous/conn"
 	"github.com/nyogjtrc/deciduous/logging"
 	"github.com/nyogjtrc/deciduous/routes"
+	"github.com/nyogjtrc/deciduous/ver"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
 var (
-	version string
-	date    string
-	commit  string
+	version   string
+	buildtime string
+	commit    string
 )
+
+func setVersion() {
+	ver.Version = version
+	ver.BuildTime = buildtime
+	ver.Commit = commit
+}
 
 func connectDB() {
 	dbRead, err := conn.DBReadOpen(viper.GetString(config.KeyMariaRead))
@@ -67,11 +74,8 @@ func main() {
 	logger := logging.NewRollingLogger()
 	zap.ReplaceGlobals(logger)
 
-	zap.L().Info("info",
-		zap.String("version", version),
-		zap.String("commit:", commit),
-		zap.String("date:", date),
-	)
+	setVersion()
+	ver.Print()
 
 	err := config.Load()
 	if err != nil {
