@@ -10,6 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nyogjtrc/deciduous/internal/ver"
 	"github.com/nyogjtrc/deciduous/pkg/config"
+	"github.com/nyogjtrc/deciduous/pkg/conn"
+	"github.com/nyogjtrc/deciduous/pkg/http/rest"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -27,6 +29,11 @@ var apiCmd = &cobra.Command{
 
 		config.LoadEnv()
 
+		db, err := conn.OpenGormFromViper()
+		if err != nil {
+			panic(err.Error())
+		}
+
 		r := gin.Default()
 		r.Use(gzip.Gzip(gzip.BestSpeed))
 		r.GET("/api/ping", func(c *gin.Context) {
@@ -34,6 +41,9 @@ var apiCmd = &cobra.Command{
 		})
 
 		ver.Router(r)
+
+		dbHandler := rest.NewDatabaseHandler(db)
+		dbHandler.Router(r)
 
 		go func() {
 			if err := r.Run(); err != nil {

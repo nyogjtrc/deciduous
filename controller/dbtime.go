@@ -9,6 +9,7 @@ import (
 )
 
 // DBnow response db time now
+// deprecate
 func DBnow(c *gin.Context) {
 	var result string
 	err := conn.DBRead().QueryRow("SELECT NOW()").Scan(&result)
