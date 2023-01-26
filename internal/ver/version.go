@@ -7,7 +7,10 @@ package ver
 
 import (
 	"fmt"
+	"net/http"
 	"runtime"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Version info
@@ -37,4 +40,11 @@ func Maps() map[string]string {
 		"build_time": BuildTime,
 		"commit":     Commit,
 	}
+}
+
+// Router for gin
+func Router(r *gin.Engine) {
+	r.GET("/api/version", func(c *gin.Context) {
+		c.JSON(http.StatusOK, Maps())
+	})
 }
