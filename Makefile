@@ -22,7 +22,7 @@ coverage:
 	rm coverage.out
 
 build:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o deciduous -a -v -ldflags $(build_flag) ./main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o deciduous -a -v -ldflags $(build_flag) ./cmd/main.go
 
 run:
 	go run -v -ldflags $(build_flag)  main.go
