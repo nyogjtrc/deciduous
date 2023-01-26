@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/nyogjtrc/deciduous/internal/ver"
+	"github.com/nyogjtrc/deciduous/pkg/config"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -23,6 +24,8 @@ var apiCmd = &cobra.Command{
 	Long:  `REST API service`,
 	Run: func(cmd *cobra.Command, args []string) {
 		zap.ReplaceGlobals(zap.Must(zap.NewProduction()))
+
+		config.LoadEnv()
 
 		r := gin.Default()
 		r.Use(gzip.Gzip(gzip.BestSpeed))
