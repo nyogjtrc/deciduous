@@ -21,17 +21,11 @@ coverage:
 	go tool cover -func=coverage.out
 	rm coverage.out
 
+run-version:
+	go run -v -ldflags $(build_flag) cmd/main.go version
+
 build:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o deciduous -a -v -ldflags $(build_flag) ./cmd/main.go
-
-run:
-	go run -v -ldflags $(build_flag)  main.go
-
-run-service:
-	go run -v -ldflags $(build_flag)  main.go service
-
-install:
-	go install -a -v -ldflags $(build_flag)
 
 tar:
 	tar zcvf deciduous.tar.gz ./deciduous
