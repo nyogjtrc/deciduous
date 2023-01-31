@@ -34,6 +34,11 @@ var apiCmd = &cobra.Command{
 			panic(err.Error())
 		}
 
+		red, err := conn.OpenRedisFromViper()
+		if err != nil {
+			panic(err.Error())
+		}
+
 		r := gin.Default()
 		r.Use(gzip.Gzip(gzip.BestSpeed))
 		r.GET("/api/ping", func(c *gin.Context) {
@@ -42,7 +47,7 @@ var apiCmd = &cobra.Command{
 
 		ver.Router(r)
 
-		dbHandler := rest.NewDatabaseHandler(db)
+		dbHandler := rest.NewDatabaseHandler(db, red)
 		dbHandler.Router(r)
 
 		go func() {
