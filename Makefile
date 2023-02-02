@@ -4,9 +4,9 @@ buildtime := $(shell date +%Y/%m/%dT%H:%M:%S)
 commit := $(shell git rev-parse --short HEAD)
 
 build_flag := "-w \
-	-X github.com/nyogjtrc/deciduous/internal/ver.Version=$(version) \
-	-X github.com/nyogjtrc/deciduous/internal/ver.BuildTime=$(buildtime) \
-	-X github.com/nyogjtrc/deciduous/internal/ver.Commit=$(commit)"
+	-X github.com/nyogjtrc/go-ver.Version=$(version) \
+	-X github.com/nyogjtrc/go-ver.BuildAt=$(buildtime) \
+	-X github.com/nyogjtrc/go-ver.Commit=$(commit)"
 
 .PHONY: all
 

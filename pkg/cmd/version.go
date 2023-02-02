@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/nyogjtrc/deciduous/internal/ver"
+	"github.com/nyogjtrc/go-ver"
 	"github.com/spf13/cobra"
 )
 

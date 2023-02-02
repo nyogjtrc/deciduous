@@ -8,10 +8,10 @@ import (
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
-	"github.com/nyogjtrc/deciduous/internal/ver"
 	"github.com/nyogjtrc/deciduous/pkg/config"
 	"github.com/nyogjtrc/deciduous/pkg/conn"
 	"github.com/nyogjtrc/deciduous/pkg/http/rest"
+	"github.com/nyogjtrc/go-ver"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
